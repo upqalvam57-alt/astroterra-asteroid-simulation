@@ -11538,7 +11538,7 @@
             ]
         },
         "model": {
-            "gltf": "/Bennu.glb",
+            "gltf": "https://super-fenglisu-423621.netlify.app/Bennu.glb",
             "minimumPixelSize": 80,
             "scale": 20000.0
         },
