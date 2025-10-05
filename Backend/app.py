@@ -139,28 +139,39 @@ async def get_curated_neo_list():
         raise HTTPException(status_code=500, detail=f"SBDB API error: {str(e)}")
 
 # --- Add this function to your app.py ---
+# --- (This is the new, correct code) ---
+
+@app.get("/neos/curated_list")
+def get_curated_neo_list():
+    """
+    Loads the PRE-COMPUTED curated list of NEOs from a static JSON file.
+    """
+    curated_list_path = os.path.join(STATIC_DIR, "curated_neo_list.json")
+    
+    if not os.path.exists(curated_list_path):
+        raise HTTPException(
+            status_code=500, 
+            detail="Error: 'curated_neo_list.json' not found. Please run the precompute_neos.py script first."
+        )
+    
+    with open(curated_list_path, "r") as f:
+        return json.load(f)
 
 @app.get("/neos/list")
-async def get_neo_list(limit: int = 200):
-    print(f"--- DIAGNOSTIC: /neos/list: Request received (limit={limit}). ---")
-    try:
-        response = await run_in_threadpool(
-            requests.get,
-            "https://ssd-api.jpl.nasa.gov/sbdb_query.api",
-            params={"limit": limit, "fields": "spkid,full_name,H,pha", "sb-class": "APO"},
-            timeout=30
+def get_neo_list():
+    """
+    Loads the PRE-COMPUTED full list of NEOs from a static JSON file.
+    """
+    neo_list_path = os.path.join(STATIC_DIR, "neo_list.json")
+
+    if not os.path.exists(neo_list_path):
+        raise HTTPException(
+            status_code=500, 
+            detail="Error: 'neo_list.json' not found. Please run the precompute_neos.py script first."
         )
-        response.raise_for_status()
-        raw_data = response.json()
-        clean_list = []
-        for item in raw_data.get("data", []):
-            spkid, fullname, h, pha = item
-            h_mag = float(h) if h is not None else None; is_pha = pha == 'Y'
-            classification = get_asteroid_classification(h_mag, is_pha)
-            clean_list.append({"spkid": spkid, "name": fullname, "classification": classification})
-        return clean_list
-    except requests.RequestException as e:
-        raise HTTPException(status_code=500, detail=f"SBDB API error: {str(e)}")
+    
+    with open(neo_list_path, "r") as f:
+        return json.load(f)
 
 
 @app.get("/czml/catalog")

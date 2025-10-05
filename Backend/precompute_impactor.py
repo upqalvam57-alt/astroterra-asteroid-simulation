@@ -67,7 +67,8 @@ def create_czml_manually(positions_meters, times_seconds):
     # --- THIS IS THE KEY CHANGE ---
     # Construct the full, absolute URL to the Bennu model on your frontend server.
     # Assets in the 'public' folder are served from the root '/'.
-    bennu_model_url = f"{FRONTEND_SERVER_URL}/Bennu.glb"
+    # bennu_model_url = f"{FRONTEND_SERVER_URL}/Bennu.glb"
+    bennu_model_url = "/Bennu.glb"
     print(f"Hardcoding model path to: {bennu_model_url}")
 
     impactor_packet = {

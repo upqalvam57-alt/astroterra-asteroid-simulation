@@ -11538,7 +11538,7 @@
             ]
         },
         "model": {
-            "gltf": "http://localhost:5173/Bennu.glb",
+            "gltf": "/Bennu.glb",
             "minimumPixelSize": 80,
             "scale": 20000.0
         },

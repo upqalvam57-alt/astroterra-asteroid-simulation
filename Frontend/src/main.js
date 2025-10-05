@@ -9,7 +9,8 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 // --- GLOBAL VARIABLES ---
 let viewer;
-const API_BASE_URL = 'http://localhost:8001';
+// --- THIS IS THE CORRECT WAY ---
+const apiUrl = import.meta.env.VITE_API_URL;
 let allNeos = [];
 let heatmapDataSource = null;
 
