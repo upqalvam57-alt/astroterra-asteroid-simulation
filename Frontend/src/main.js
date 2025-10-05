@@ -9,8 +9,7 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 
 // --- GLOBAL VARIABLES ---
 let viewer;
-// --- THIS IS THE CORRECT WAY ---
-const apiUrl = import.meta.env.VITE_API_URL;
+
 let allNeos = [];
 let heatmapDataSource = null;
 
@@ -309,7 +308,7 @@ function updateSandboxInstructions() {
 
 async function populateCuratedList() {
     try {
-        const response = await fetch(`${API_BASE_URL}/neos/curated_list`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/neos/curated_list`);
         if (!response.ok) throw new Error('Failed to fetch curated NEO list.');
         const data = await response.json();
         const selectElement = document.getElementById('curated-neo-select');
@@ -350,7 +349,7 @@ async function populateCuratedList() {
 
 async function preloadHeatmapData(showByDefault = false) {
     try {
-        const neosUrl = `${API_BASE_URL}/czml/catalog`;
+        const neosUrl = `${import.meta.env.VITE_API_URL}/czml/catalog`;
         heatmapDataSource = await Cesium.CzmlDataSource.load(neosUrl);
         
         // --- REPLACE THE OLD forEach LOOP WITH THIS NEW LOGIC ---
@@ -410,7 +409,7 @@ async function visualizeNeoHeatmap() {
 }
 async function fetchAndPopulateNeoList() {
     try {
-        const response = await fetch(`${API_BASE_URL}/neos/list`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/neos/list`);
         if (!response.ok) throw new Error(`Failed to fetch NEO list with status: ${response.status}`);
         allNeos = await response.json();
         // The data is now loaded into the allNeos array for future use.
@@ -535,7 +534,7 @@ async function startPhase1Mission() {
     };
 
     // 4. Load the CZML trajectory
-    const czmlUrl = `${API_BASE_URL}/static/impactor2025.czml`;
+    const czmlUrl = `${import.meta.env.VITE_API_URL}/static/impactor2025.czml`;
     
     phase1DataSource = await Cesium.CzmlDataSource.load(czmlUrl);
     await viewer.dataSources.add(phase1DataSource);
@@ -1005,7 +1004,7 @@ async function launchMitigationMission() {
 
     try {
         // 4. SEND DATA TO THE BACKEND
-        const response = await fetch(`${API_BASE_URL}/simulation/launch_mitigation`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/simulation/launch_mitigation`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
