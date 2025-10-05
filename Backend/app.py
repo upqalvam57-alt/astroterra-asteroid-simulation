@@ -102,6 +102,10 @@ async def launch_mitigation_vehicle(payload: dict):
         if not trajectory_params or not launch_time_iso:
             raise HTTPException(status_code=400, detail="Missing trajectory_params or launchTimeISO in request.")
 
+        # FIX: SPICE's str2et is strict and doesn't like the 'Z' UTC designator.
+        if launch_time_iso.endswith('Z'):
+            launch_time_iso = launch_time_iso[:-1]
+
         # Convert the ISO launch time string to SPICE Ephemeris Time (ET)
         launch_time_et = spice.str2et(launch_time_iso)
 
