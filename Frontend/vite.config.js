@@ -9,7 +9,7 @@ export default defineConfig({
     proxy: {
       // This rule now points to your Python server!
       '/api': {
-        target: 'http://localhost:8000', // <-- THE NEW PYTHON SERVER PORT
+        target: 'http://localhost:8001', // <-- THE NEW PYTHON SERVER PORT
         changeOrigin: true,
         // This rewrite is simpler and better.
         // It removes '/api' before sending to the backend.

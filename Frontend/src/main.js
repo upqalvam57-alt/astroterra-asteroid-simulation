@@ -263,7 +263,7 @@ function launchSimpleImpact() {
         name: asteroidName,
         availability: new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({ start: startTime, stop: stopTime })]),
         position: positionProperty,
-        model: { uri: '/Bennu.glb', minimumPixelSize: 64 },
+        model: { uri: 'Bennu.glb', minimumPixelSize: 64 },
         path: new Cesium.PathGraphics({ width: 2, material: Cesium.Color.ORANGE.withAlpha(0.5) })
     });
 
@@ -499,6 +499,12 @@ async function startPhase1Mission() {
     document.getElementById('phase1-decision-step').style.display = 'none';    // CORRECT ID
    document.getElementById('transition-to-phase2-btn').style.display = 'none';
 
+    // 4. Load the CZML trajectory
+    const czmlUrl = `${import.meta.env.VITE_API_URL}/static/impactor2025.czml`;
+    
+    phase1DataSource = await Cesium.CzmlDataSource.load(czmlUrl);
+    await viewer.dataSources.add(phase1DataSource);
+
     // 3. Logic for the "Observe" button
     let observationCount = 0;
     const observeBtn = document.getElementById('phase1-observe-btn');
@@ -532,12 +538,6 @@ async function startPhase1Mission() {
             document.getElementById('phase1-decision-step').style.display = 'block';
         }
     };
-
-    // 4. Load the CZML trajectory
-    const czmlUrl = `${import.meta.env.VITE_API_URL}/static/impactor2025.czml`;
-    
-    phase1DataSource = await Cesium.CzmlDataSource.load(czmlUrl);
-    await viewer.dataSources.add(phase1DataSource);
 
     // 5. Synchronize Clock and set speed
     if (phase1DataSource.clock) {
@@ -987,7 +987,7 @@ async function launchMitigationMission() {
     // 2. CALCULATE THE PRECISE LAUNCH TIME
     const currentTime = viewer.clock.currentTime;
     const actualLaunchTime = Cesium.JulianDate.addDays(currentTime, launchPrepTimeDays, new Cesium.JulianDate());
-    const launchTimeISO = Cesium.JulianDate.toIso8601(actualLaunchTime);
+    const launchTimeISO = Cesium.JulianDate.toIso8601(actualLaunchTime, 0) + 'Z';
     
     console.log(`Current Sim Time: ${Cesium.JulianDate.toIso8601(currentTime)}`);
     console.log(`Prep Time: ${launchPrepTimeDays} days`);
